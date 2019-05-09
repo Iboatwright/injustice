@@ -5,19 +5,17 @@
  * Assignment: 6
  * Date: 5.7.19
  *
- * JUnit5.4.2 IntegerSet Parameterized Unit Tests
- */
-/*
-TODO: JUnit5 implementation will result in output that doesn't match the examples
-      given. Rather than risking stupidiy on top of injustice, I will explore
-      a JUnit4 solution.
+ * JUnit4.12 IntegerSet Parameterized Unit Tests
  */
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+/*
+TODO: JUnit4 implementation
+ */
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import static org.junit.Assert.*;
 
 import javax.imageio.IIOException;
 import java.io.File;
@@ -29,6 +27,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+@RunWith(Parameterized.class)
 class IntegerSetTest {
   List<List<Integer>> testData;
 
@@ -63,11 +62,11 @@ class IntegerSetTest {
 
   }
 
-  @BeforeEach
+  @Before
   void setUp() {
   }
 
-  @AfterEach
+  @After
   void tearDown() {
   }
 
@@ -78,7 +77,7 @@ class IntegerSetTest {
   }
 
   // tests if  a value exists in a set
-  @ParameterizedTest
+  @Test
   void testExists(){}
 
 
