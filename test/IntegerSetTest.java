@@ -23,24 +23,43 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+
 @RunWith(Parameterized.class)
 class IntegerSetTest {
-  List<List<Integer>> testData;
+  private IntegerSet integerSet;
+  private List<Integer> first_list_of_numbers;
+  private List<Integer> unique_numbers_in_the_first_list;
+  private List<Integer> second_list_of_numbers;
+  private List<Integer> unique_numbers_in_the_second_list;
+  private List<Integer> intersection_of_set1_and_set2;
+  private List<Integer> union_of_set1_and_set2;
 
-  IntegerSet{
-    Scanner test_input;
+  // Constructor for assigning currect test set to instance variables
+  public IntegerSet(String first, String first_unique, String second,
+                    String second_unique, String intersection, String union){
+    this.first_list_of_numbers = Arrays.asList(first.split(","))
+                                       .forEach(Integer::valueOf);
+    this.unique_numbers_in_the_first_list = Arrays.asList(first_unique.split(","))
+                                                  .forEach(Integer::valueOf);
+    this.second_list_of_numbers = Arrays.asList(second.split(","))
+                                        .forEach(Integer::valueOf);
+    this.unique_numbers_in_the_second_list = Arrays.asList(second_unique.split(","))
+                                                   .forEach(Integer::valueOf);
+    this.intersection_of_set1_and_set2 = Arrays.asList(intersection.split(","))
+                                               .forEach(Integer::valueOf);
+    this.union_of_set1_and_set2 = Arrays.asList(union.split(","))
+                                        .forEach(Integer::valueOf);
+  }
 
-/*    // open the test_input file
-    try {
-      test_input = new Scanner(new File("test_input.txt"));
-    } catch(FileNotFoundException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }*/
+  @Parameterized.Parameters
+  public static Collection<Object[]> data() {
+    List<String> test_input;
+    List<List<String>> testData;
 
     try {
       test_input = Files.readAllLines("test_input.txt")
@@ -48,26 +67,26 @@ class IntegerSetTest {
 
     }
 
-    // read each line and split it into an Integer list
-    while (test_input.hasNextLine()) {
-      testData.add(
-          Stream
-              .of(test_input.nextLine().split(","))
-              .map(Integer::valueOf)
-              .collect(Collectors.toList())
-      );
+    // loop through the test_input 7 lines at a time
+    int line = 0;
+    for (int i=0; i < test_input.size()/7; i++){
+      // copy the 6 lists of test data to test set i
+      for (int j=0; j=5; j++) {
+        testData[i][j] = test_input.get(line++);
+      }
+      line++; // skip the test set blank line delimeter
     }
-
-    // TODO: split testData into the 6 lists
-
+    return testData;
   }
 
   @Before
   void setUp() {
+    integerSet = new IntegerSet();
   }
 
   @After
   void tearDown() {
+    integerSet = null;
   }
 
   // tests null inputs for intersection
@@ -78,7 +97,10 @@ class IntegerSetTest {
 
   // tests if  a value exists in a set
   @Test
-  void testExists(){}
+  void testExists(){
+    System.out.println("input: ");
+    assertNull(null);
+  }
 
 
   // tests if an IntegerSet is empty
