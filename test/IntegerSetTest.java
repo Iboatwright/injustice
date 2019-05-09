@@ -7,7 +7,11 @@
  *
  * JUnit5.4.2 IntegerSet Parameterized Unit Tests
  */
-
+/*
+TODO: JUnit5 implementation will result in output that doesn't match the examples
+      given. Rather than risking stupidiy on top of injustice, I will explore
+      a JUnit4 solution.
+ */
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +19,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.imageio.IIOException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -28,12 +35,18 @@ class IntegerSetTest {
   IntegerSet{
     Scanner test_input;
 
-    // open the test_input file
+/*    // open the test_input file
     try {
       test_input = new Scanner(new File("test_input.txt"));
     } catch(FileNotFoundException e) {
       e.printStackTrace();
       System.exit(1);
+    }*/
+
+    try {
+      test_input = Files.readAllLines("test_input.txt")
+    } catch (IOException|SecurityException e) {
+
     }
 
     // read each line and split it into an Integer list
