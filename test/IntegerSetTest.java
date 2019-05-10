@@ -12,70 +12,72 @@
 TODO: JUnit4 implementation
  */
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static org.junit.Assert.*;
 
-import javax.imageio.IIOException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
-
+import java.util.stream.Stream;
 
 @RunWith(Parameterized.class)
 class IntegerSetTest {
   private IntegerSet integerSet;
-  private List<Integer> first_list_of_numbers;
-  private List<Integer> unique_numbers_in_the_first_list;
-  private List<Integer> second_list_of_numbers;
-  private List<Integer> unique_numbers_in_the_second_list;
-  private List<Integer> intersection_of_set1_and_set2;
-  private List<Integer> union_of_set1_and_set2;
+  private int[] first_list_of_numbers;
+  private int[] unique_numbers_in_the_first_list;
+  private int[] second_list_of_numbers;
+  private int[] unique_numbers_in_the_second_list;
+  private int[] intersection_of_set1_and_set2;
+  private int[] union_of_set1_and_set2;
 
-  // Constructor for assigning currect test set to instance variables
-  public IntegerSet(String first, String first_unique, String second,
-                    String second_unique, String intersection, String union){
-    this.first_list_of_numbers = Arrays.asList(first.split(","))
-                                       .forEach(Integer::valueOf);
-    this.unique_numbers_in_the_first_list = Arrays.asList(first_unique.split(","))
-                                                  .forEach(Integer::valueOf);
-    this.second_list_of_numbers = Arrays.asList(second.split(","))
-                                        .forEach(Integer::valueOf);
-    this.unique_numbers_in_the_second_list = Arrays.asList(second_unique.split(","))
-                                                   .forEach(Integer::valueOf);
-    this.intersection_of_set1_and_set2 = Arrays.asList(intersection.split(","))
-                                               .forEach(Integer::valueOf);
-    this.union_of_set1_and_set2 = Arrays.asList(union.split(","))
-                                        .forEach(Integer::valueOf);
+  // Constructor for assigning current test set to instance variables
+  public IntegerSetTest(int[] first, int[] first_unique, int[] second,
+                        int[] second_unique, int[] intersection, int[] union){
+    this.first_list_of_numbers = first;
+    this.unique_numbers_in_the_first_list = first_unique;
+    this.second_list_of_numbers = second;
+    this.unique_numbers_in_the_second_list = second_unique;
+    this.intersection_of_set1_and_set2 = intersection;
+    this.union_of_set1_and_set2 = union;
   }
 
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
-    List<String> test_input;
-    List<List<String>> testData;
+    List<String> test_input = new ArrayList<>();
+    ArrayList<Object[]> testData = new ArrayList<>();
 
     try {
-      test_input = Files.readAllLines("test_input.txt")
+      test_input = Files.readAllLines(Paths.get("test_input.txt"));
     } catch (IOException|SecurityException e) {
-
+      e.printStackTrace();
     }
 
     // loop through the test_input 7 lines at a time
     int line = 0;
-    for (int i=0; i < test_input.size()/7; i++){
-      // copy the 6 lists of test data to test set i
-      for (int j=0; j=5; j++) {
-        testData[i][j] = test_input.get(line++);
+    Object[] test_set = new Object[6];
+    for (int i=0; i < test_input.size()/test_set.length; i++){
+      // copy the 6 lists of test data to test_set j as int arrays
+      for (int j=0; j<6; j++) {
+        test_set[j] = Stream.of(test_input.get(line++).split(","))
+                            .mapToInt(Integer::parseInt)
+                            .toArray();
       }
-      line++; // skip the test set blank line delimeter
+      // TEST - shows the output is an int[]
+      //System.out.println(Stream.of("1,2,3,4".split(",")).mapToInt(Integer::parseInt).toArray()[i]);
+      testData.add(test_set);
+      line++; // skip the test set blank line delimiter
     }
+
     return testData;
   }
 
@@ -98,7 +100,7 @@ class IntegerSetTest {
   // tests if  a value exists in a set
   @Test
   void testExists(){
-    System.out.println("input: ");
+    System.out.println("intersection: " + intersection_of_set1_and_set2[0]);
     assertNull(null);
   }
 
