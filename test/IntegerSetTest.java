@@ -26,22 +26,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RunWith(Parameterized.class)
 class IntegerSetTest {
-  private IntegerSet integerSet;
-  private List<Integer> first_list_of_numbers;
-  private int[] unique_numbers_in_the_first_list;
-  private int[] second_list_of_numbers;
-  private int[] unique_numbers_in_the_second_list;
-  private int[] intersection_of_set1_and_set2;
-  private int[] union_of_set1_and_set2;
+  private IntegerSet integerSet1;
+  private IntegerSet integerSet2;
+  private Integer[] first_list_of_numbers;
+  private Integer[] unique_numbers_in_the_first_list;
+  private Integer[] second_list_of_numbers;
+  private Integer[] unique_numbers_in_the_second_list;
+  private Integer[] intersection_of_set1_and_set2;
+  private Integer[] union_of_set1_and_set2;
 
   // Constructor for assigning current test set to instance variables
-  public IntegerSetTest(List<Integer> first, int[] first_unique, int[] second,
-                        int[] second_unique, int[] intersection, int[] union){
+  public IntegerSetTest(Integer[] first, Integer[] first_unique,
+                        Integer[] second, Integer[] second_unique,
+                        Integer[] intersection, Integer[] union){
     this.first_list_of_numbers = first;
     this.unique_numbers_in_the_first_list = first_unique;
     this.second_list_of_numbers = second;
@@ -53,6 +54,7 @@ class IntegerSetTest {
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
     List<String> test_input = new ArrayList<>();
+    ArrayList<Object[]> testData = new ArrayList<>();
 
     // read each line into an ordered List
     try {
@@ -61,23 +63,22 @@ class IntegerSetTest {
       e.printStackTrace();
     }
 
-    ArrayList<Object[]> testData = new ArrayList<>();
+    // helper vars to improve code readability
     int inputsPerSet = 6;
     int inputSets = test_input.size()/(inputsPerSet +1); // +1 delimiter line
 
-    // loop through the test_input 7 lines at a time
+    // loop through the test_input and store the inputSets into testData
     int line = 0;
-    Object[][] test_set = new Object[inputSets][inputsPerSet];
+    Object[] test_set;
     for (int i=0; i < inputSets; i++){
+      test_set = new Object[inputsPerSet];
       // copy the 6 lists of test data to test_set j as boxed Integer Lists
       for (int j=0; j < inputsPerSet; j++) {
-        test_set[i][j] = Stream.of(test_input.get(line++).split(","))
+        test_set[j] = Stream.of(test_input.get(line++).split(","))
                             .mapToInt(Integer::parseInt)
                             .boxed()
-                            .collect(Collectors.toList());
+                            .toArray( Integer[]::new );
       }
-      // TEST - shows the output is an int[]
-      //System.out.println(Stream.of("1,2,3,4".split(",")).mapToInt(Integer::parseInt).toArray()[i]);
       testData.add(test_set);
       line++; // skip the test set blank line delimiter
     }
@@ -87,12 +88,14 @@ class IntegerSetTest {
 
   @Before
   void setUp() {
-    integerSet = new IntegerSet(first_list_of_numbers);
+    this.integerSet1 = new IntegerSet(first_list_of_numbers);
+    this.integerSet2 = new IntegerSet(second_list_of_numbers);
   }
 
   @After
   void tearDown() {
-    integerSet = null;
+    this.integerSet1 = null;
+    this.integerSet2 = null;
   }
 
   // tests null inputs for intersection
