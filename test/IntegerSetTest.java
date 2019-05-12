@@ -21,6 +21,16 @@
         properly address. As such, exception handling will only be tested
         where exceptions are specifically thrown. In all other cases the term
         null will be treated/tested as equivalent to list.isEmpty() == true.
+    4) I intentionally did not repeat traditional test methods for all tests. Since
+        this is an exercise to demonstrate my comprehension of testing and
+        ability to write tests. Some tests, such as testInsertAll, I
+        would not have used in production.
+    5) deleteElement does not remove an integer because this implementation
+        relies on LinkedList.remove(int x) where x is the index.
+        https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html#remove-int-
+        The obvious intent was deleteElement to perform a search and remove for
+        the int argument. The deleteElement should be rewritten to work as
+        designed.
  */
 
 import org.junit.After;
@@ -150,22 +160,25 @@ public class IntegerSetTest {
 
   @Test
   public void testInsertAll(){
-    IntegerSet newSetFromArray = new IntegerSet();
+    IntegerSet newSet = new IntegerSet();
 
-    // check that all values in the expected set are in the new set.
-    assertEquals(newSetFromArray.size(),unique_numbers_in_the_first_list.length);
-    for (int el : unique_numbers_in_the_first_list){
-      assertTrue(newSetFromArray.exists(el));
-    }
+    // insertAll from a known set and check the result against the expected.
+    newSet.insertAll(first_list_of_numbers);
+    assertEquals(newSet.toString(),integerSet1.toString());
   }
 
 
   @Test
-  public void testInsertAllNull(){}
+  public void testInsertAllNull(){
+  }
 
 
   @Test
-  public void testDeleteElement(){}
+  public void testDeleteElement(){
+    int testNumber = integerSet1.toArray()[0];  // first element of the set
+    integerSet1.deleteElement(0);  // remove the first element **(see Note 5)
+    assertTrue(!integerSet1.exists(testNumber));
+  }
 
 
   @Test
