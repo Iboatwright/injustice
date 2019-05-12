@@ -47,6 +47,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @RunWith(Parameterized.class)
@@ -124,6 +126,21 @@ public class IntegerSetTest {
   @Test
   public void testExists(){
     assertTrue(integerSet1.exists(first_list_of_numbers[0]));
+
+    // generate an integer than is not in integerSet1
+    Random rando = new Random();
+    int randomInteger = rando.nextInt();
+    while (integerSet1.exists(randomInteger)) {
+      randomInteger = rando.nextInt();
+    }
+
+    // insert it into integerSet1 and check that it exists
+    integerSet1.insertElement(randomInteger);
+    assertTrue(integerSet1.exists(randomInteger));
+
+    // insert an existing value and check that it still exists
+    integerSet1.insertElement(first_list_of_numbers[1]);
+    assertTrue(integerSet1.exists(first_list_of_numbers[1]));
   }
 
   // tests if an IntegerSet is empty
@@ -182,7 +199,10 @@ public class IntegerSetTest {
 
 
   @Test
-  public void testDeleteAll(){}
+  public void testDeleteAll(){
+    integerSet1.deleteAll();
+    assertTrue(integerSet1.isEmpty());
+  }
 
 
   // tests the union of two sets
