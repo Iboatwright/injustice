@@ -153,12 +153,9 @@ public class IntegerSetTest {
 
 
   // tests the creation of a set from  null
-  @Test
+  @Test(expected = NullPointerException.class)
   public void testCreateSetFromNull(){
-    // first create with default constructor
-
-    // second create passing null to the constructor
-    // TODO: implement NullPointerException handling
+    new IntegerSet(null);
   }
 
 
@@ -185,8 +182,9 @@ public class IntegerSetTest {
   }
 
 
-  @Test
+  @Test(expected = NullPointerException.class)
   public void testInsertAllNull(){
+    new IntegerSet().insertAll(null);
   }
 
 
