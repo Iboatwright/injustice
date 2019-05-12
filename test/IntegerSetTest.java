@@ -9,7 +9,10 @@
  */
 
 /*
-TODO: JUnit4 implementation
+  Notes:
+    1) IntegerSet.java line 130 in the union method will never reach the false
+        branch condition. IntegerSets cannot contain duplicate elements. The if
+        statement on line 130 should be removed.
  */
 
 import org.junit.After;
@@ -99,15 +102,9 @@ public class IntegerSetTest {
     this.integerSet2 = null;
   }
 
-  // tests null inputs for intersection
-  @Test
-  public void testIntersectionWithNullInput(){
-  }
-
   // tests if  a value exists in a set
   @Test
   public void testExists(){
-//    assertEquals(integerSet1.toArray()[0],first_list_of_numbers[0]);
     assertTrue(integerSet1.exists(first_list_of_numbers[0]));
   }
 
@@ -115,22 +112,8 @@ public class IntegerSetTest {
   @Test
   public void testIsEmpty(){
     assertTrue((new IntegerSet()).isEmpty());
+    assertTrue(!integerSet1.isEmpty());
   }
-
-
-  // tests the union of two sets
-  @Test
-  public void testUnion(){
-    IntegerSet unionTest = IntegerSet.union(integerSet1, integerSet2);
-    Integer[] unionArray = unionTest.toArray();
-
-
-  }
-
-
-  // tests the creation of a set from an array
-  @Test
-  public void testCreateSetFromArray(){}
 
 
   // tests the creation of a set from  null
@@ -138,12 +121,9 @@ public class IntegerSetTest {
   public void testCreateSetFromNull(){}
 
 
+  // tests the creation of a set from an array
   @Test
-  public void testDeleteAll(){}
-
-
-  @Test
-  public void testDeleteElement(){}
+  public void testCreateSetFromArray(){}
 
 
   @Test
@@ -151,14 +131,75 @@ public class IntegerSetTest {
 
 
   @Test
-  public void testAllNull(){}
+  public void testInsertAllNull(){}
+
+
+  @Test
+  public void testDeleteElement(){}
+
+
+  @Test
+  public void testDeleteAll(){}
+
+
+  // tests the union of two sets
+  @Test
+  public void testUnion(){
+    IntegerSet unionTest;
+    Integer[] unionArray;
+
+    // test union with two non-empty IntegerSets.
+    unionTest = IntegerSet.union(integerSet1, integerSet2);
+    unionArray = unionTest.toArray();
+
+    // compare each element between the sorted arrays.
+    assertEquals(unionArray.length,union_of_set1_and_set2.length);
+    for (int i=0; i < unionArray.length; i++){
+      assertEquals(unionArray[i],union_of_set1_and_set2[i]);
+    }
+  }
+
+
+  @Test
+  public void testUnionWithNullInput(){
+    IntegerSet unionTest;
+    Integer[] unionArray;
+
+    // test union with an empty array for set1 and a empty array for set2.
+    unionTest = IntegerSet.union(new IntegerSet(), new IntegerSet());
+
+    // the resulting union set is expected to be empty.
+    assertTrue(unionTest.isEmpty());
+
+    // test union with an empty array for set1 and a non-empty array for set2.
+    unionTest = IntegerSet.union(new IntegerSet(), integerSet1);
+    unionArray = unionTest.toArray();
+
+    // compare each element between the sorted arrays.
+    assertEquals(unionTest.size(),unique_numbers_in_the_first_list.length);
+    for (int i=0; i < unionArray.length; i++){
+      assertEquals(unionArray[i],unique_numbers_in_the_first_list[i]);
+    }
+
+    // test union with an non-empty array for set1 and a empty array for set2.
+    unionTest = IntegerSet.union(integerSet1, new IntegerSet());
+    unionArray = unionTest.toArray();
+
+    // compare each element between the sorted arrays.
+    assertEquals(unionTest.size(),unique_numbers_in_the_first_list.length);
+    for (int i=0; i < unionArray.length; i++){
+      assertEquals(unionArray[i],unique_numbers_in_the_first_list[i]);
+    }
+  }
 
 
   @Test
   public void testIntersection(){}
 
 
+  // tests null inputs for intersection
   @Test
-  public void testUnionWithNullInput(){}
+  public void testIntersectionWithNullInput(){
+  }
 
 }
