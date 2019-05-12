@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @RunWith(Parameterized.class)
-class IntegerSetTest {
+public class IntegerSetTest {
   private IntegerSet integerSet1;
   private IntegerSet integerSet2;
   private Integer[] first_list_of_numbers;
@@ -55,6 +55,7 @@ class IntegerSetTest {
   public static Collection<Object[]> data() {
     List<String> test_input = new ArrayList<>();
     ArrayList<Object[]> testData = new ArrayList<>();
+    Object[] testSet;
 
     // read each line into an ordered List
     try {
@@ -69,17 +70,17 @@ class IntegerSetTest {
 
     // loop through the test_input and store the inputSets into testData
     int line = 0;
-    Object[] test_set;
     for (int i=0; i < inputSets; i++){
-      test_set = new Object[inputsPerSet];
+      testSet = new Object[inputsPerSet];
       // copy the 6 lists of test data to test_set j as boxed Integer Lists
       for (int j=0; j < inputsPerSet; j++) {
-        test_set[j] = Stream.of(test_input.get(line++).split(","))
+        testSet[j] = Stream.of(test_input.get(line++).split(","))
                             .mapToInt(Integer::parseInt)
                             .boxed()
+                            .sorted()
                             .toArray( Integer[]::new );
       }
-      testData.add(test_set);
+      testData.add(testSet);
       line++; // skip the test set blank line delimiter
     }
 
@@ -87,71 +88,77 @@ class IntegerSetTest {
   }
 
   @Before
-  void setUp() {
+  public void setUp() {
     this.integerSet1 = new IntegerSet(first_list_of_numbers);
     this.integerSet2 = new IntegerSet(second_list_of_numbers);
   }
 
   @After
-  void tearDown() {
+  public void tearDown() {
     this.integerSet1 = null;
     this.integerSet2 = null;
   }
 
   // tests null inputs for intersection
   @Test
-  void testIntersectionWithNullInput(){
-
+  public void testIntersectionWithNullInput(){
   }
 
   // tests if  a value exists in a set
   @Test
-  void testExists(){
-    System.out.println("intersection: " + intersection_of_set1_and_set2[0]);
-    assertNull(null);
+  public void testExists(){
+//    assertEquals(integerSet1.toArray()[0],first_list_of_numbers[0]);
+    assertTrue(integerSet1.exists(first_list_of_numbers[0]));
   }
 
   // tests if an IntegerSet is empty
   @Test
-  void testIsEmpty(){}
+  public void testIsEmpty(){
+    assertTrue((new IntegerSet()).isEmpty());
+  }
 
 
   // tests the union of two sets
   @Test
-  void testUnion(){}
+  public void testUnion(){
+    IntegerSet unionTest = IntegerSet.union(integerSet1, integerSet2);
+    Integer[] unionArray = unionTest.toArray();
+
+
+  }
 
 
   // tests the creation of a set from an array
   @Test
-  void testCreateSetFromArray(){}
+  public void testCreateSetFromArray(){}
 
 
   // tests the creation of a set from  null
   @Test
-  void testCreateSetFromNull(){}
+  public void testCreateSetFromNull(){}
 
 
   @Test
-  void testDeleteAll(){}
+  public void testDeleteAll(){}
 
 
   @Test
-  void testDeleteElement(){}
+  public void testDeleteElement(){}
 
 
   @Test
-  void testInsertAll(){}
+  public void testInsertAll(){}
 
 
   @Test
-  void testAllNull(){}
+  public void testAllNull(){}
 
 
   @Test
-  void testIntersection(){}
+  public void testIntersection(){}
 
 
   @Test
-  void testUnionWithNullInput(){}
+  public void testUnionWithNullInput(){}
 
 }
