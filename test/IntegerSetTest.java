@@ -13,6 +13,14 @@
     1) IntegerSet.java line 130 in the union method will never reach the false
         branch condition. IntegerSets cannot contain duplicate elements. The if
         statement on line 130 should be removed.
+    2) IntegerSet.java line 155 states it is checking for null pointers, but
+        in fact it will throw an unhandled NullPointerException. Either the
+        comments should be corrected or the if statement needs to be rewritten
+        to properly handle null arguments.
+    3) There is a disparity between null and empty that this assignment fails to
+        properly address. As such, exception handling will only be tested
+        where exceptions are specifically thrown. In all other cases the term
+        null will be treated/tested as equivalent to list.isEmpty() == true.
  */
 
 import org.junit.After;
@@ -113,21 +121,43 @@ public class IntegerSetTest {
   public void testIsEmpty(){
     assertTrue((new IntegerSet()).isEmpty());
     assertTrue(!integerSet1.isEmpty());
+    assertEquals((new IntegerSet()).toString(),"[]");
   }
 
 
   // tests the creation of a set from  null
   @Test
-  public void testCreateSetFromNull(){}
+  public void testCreateSetFromNull(){
+    // first create with default constructor
+
+    // second create passing null to the constructor
+    // TODO: implement NullPointerException handling
+  }
 
 
   // tests the creation of a set from an array
   @Test
-  public void testCreateSetFromArray(){}
+  public void testCreateSetFromArray(){
+    IntegerSet newSetFromArray = new IntegerSet(first_list_of_numbers);
+
+    // check that all values in the expected set are in the new set.
+    assertEquals(newSetFromArray.size(),unique_numbers_in_the_first_list.length);
+    for (int el : unique_numbers_in_the_first_list){
+      assertTrue(newSetFromArray.exists(el));
+    }
+  }
 
 
   @Test
-  public void testInsertAll(){}
+  public void testInsertAll(){
+    IntegerSet newSetFromArray = new IntegerSet();
+
+    // check that all values in the expected set are in the new set.
+    assertEquals(newSetFromArray.size(),unique_numbers_in_the_first_list.length);
+    for (int el : unique_numbers_in_the_first_list){
+      assertTrue(newSetFromArray.exists(el));
+    }
+  }
 
 
   @Test
@@ -194,12 +224,44 @@ public class IntegerSetTest {
 
 
   @Test
-  public void testIntersection(){}
+  public void testIntersection(){
+    IntegerSet intersectionTest;
+    Integer[] intersectionArray;
+
+    // test intersection with two non-empty IntegerSets.
+    intersectionTest = IntegerSet.intersection(integerSet1, integerSet2);
+    intersectionArray = intersectionTest.toArray();
+
+    // compare each element between the sorted arrays.
+    assertEquals(intersectionTest.size(),intersection_of_set1_and_set2.length);
+    for (int i=0; i < intersectionArray.length; i++){
+      assertEquals(intersectionArray[i],intersection_of_set1_and_set2[i]);
+    }
+  }
 
 
-  // tests null inputs for intersection
+  // tests null inputs for intersection **(see Notes 2 and 3).
   @Test
   public void testIntersectionWithNullInput(){
+    IntegerSet intersectionTest;
+
+    // test intersection with an empty array for set1 and a empty array for set2.
+    intersectionTest = IntegerSet.intersection(new IntegerSet(), new IntegerSet());
+
+    // the resulting intersection set is expected to be empty.
+    assertTrue(intersectionTest.isEmpty());
+
+    // test intersection with an empty array for set1 and a non-empty array for set2.
+    intersectionTest = IntegerSet.intersection(new IntegerSet(), integerSet1);
+
+    // intersection with an empty set should be and empty set
+    assertTrue(intersectionTest.isEmpty());
+
+    // test intersection with an non-empty array for set1 and a empty array for set2.
+    intersectionTest = IntegerSet.intersection(integerSet2, new IntegerSet());
+
+    // intersection with an empty set should be and empty set
+    assertTrue(intersectionTest.isEmpty());
   }
 
 }
