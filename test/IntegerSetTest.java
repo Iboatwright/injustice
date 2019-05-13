@@ -3,7 +3,7 @@
  * Author: 5153
  * Course: CEN 4072
  * Assignment: 6
- * Date: 5.7.19
+ * Date: 5.12.19
  *
  * JUnit4.12 IntegerSet Parameterized Unit Tests
  */
@@ -48,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @RunWith(Parameterized.class)
@@ -74,6 +73,7 @@ public class IntegerSetTest {
     this.union_of_set1_and_set2 = union;
   }
 
+  // Provides parameters to be injected into this test class
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
     List<String> test_input = new ArrayList<>();
@@ -92,11 +92,12 @@ public class IntegerSetTest {
     int inputSets = test_input.size()/(inputsPerSet +1); // +1 delimiter line
 
     // loop through the test_input and store the inputSets into testData
-    int line = 0;
+    int line = 0;  // line number from the test_input.txt file ~ test_input List
     for (int i=0; i < inputSets; i++){
       testSet = new Object[inputsPerSet];
       // copy the 6 lists of test data to test_set j as boxed Integer Lists
       for (int j=0; j < inputsPerSet; j++) {
+        // converts the String read from the file into a sorted Integer[] array
         testSet[j] = Stream.of(test_input.get(line++).split(","))
                             .mapToInt(Integer::parseInt)
                             .boxed()
@@ -110,24 +111,26 @@ public class IntegerSetTest {
     return testData;
   }
 
+  // new IntegerSets created before each test
   @Before
   public void setUp() {
     this.integerSet1 = new IntegerSet(first_list_of_numbers);
     this.integerSet2 = new IntegerSet(second_list_of_numbers);
   }
 
+  // clear the IntegerSet instance variables after each test
   @After
   public void tearDown() {
     this.integerSet1 = null;
     this.integerSet2 = null;
   }
 
-  // tests if  a value exists in a set
+  // tests if a value exists in a set
   @Test
   public void testExists(){
     assertTrue(integerSet1.exists(first_list_of_numbers[0]));
 
-    // generate an integer than is not in integerSet1
+    // generate an integer that is not in integerSet1
     Random rando = new Random();
     int randomInteger = rando.nextInt();
     while (integerSet1.exists(randomInteger)) {
@@ -146,6 +149,7 @@ public class IntegerSetTest {
   // tests if an IntegerSet is empty
   @Test
   public void testIsEmpty(){
+    // different checks that the IntegerSet is empty
     assertTrue((new IntegerSet()).isEmpty());
     assertTrue(!integerSet1.isEmpty());
     assertEquals((new IntegerSet()).toString(),"[]");
@@ -171,7 +175,8 @@ public class IntegerSetTest {
     }
   }
 
-
+  // tests that all the elements in an Integer[] array are added to an existing
+  // IntegerSet as expected.
   @Test
   public void testInsertAll(){
     IntegerSet newSet = new IntegerSet();
@@ -181,13 +186,13 @@ public class IntegerSetTest {
     assertEquals(newSet.toString(),integerSet1.toString());
   }
 
-
+  // tests that the proper exception is thrown when insertAll is passed null
   @Test(expected = NullPointerException.class)
   public void testInsertAllNull(){
     new IntegerSet().insertAll(null);
   }
 
-
+  // tests that the correct element is deleted from an IntegerSet
   @Test
   public void testDeleteElement(){
     int testNumber = integerSet1.toArray()[0];  // first element of the set
@@ -195,7 +200,7 @@ public class IntegerSetTest {
     assertTrue(!integerSet1.exists(testNumber));
   }
 
-
+  // tests that all elements are deleted from an IntegerSet
   @Test
   public void testDeleteAll(){
     integerSet1.deleteAll();
@@ -220,7 +225,7 @@ public class IntegerSetTest {
     }
   }
 
-
+  // tests null inputs for union **(see Notes 2 and 3).
   @Test
   public void testUnionWithNullInput(){
     IntegerSet unionTest;
@@ -253,7 +258,7 @@ public class IntegerSetTest {
     }
   }
 
-
+  // tests that only the integers in common between two sets are returned
   @Test
   public void testIntersection(){
     IntegerSet intersectionTest;
